@@ -1840,5 +1840,12 @@ header.navbar, .navbar {
         white-space: nowrap !important;
     }
 }
-
+/* ปรับสำหรับหน้าจอมือถือ */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 10px 15px !important; /* ลดระยะขอบด้านข้างลงไม่ให้ล้น */
+        flex-wrap: wrap !important;     /* ให้เมนูปัดลงมาบรรทัดใหม่ได้ถ้าพื้นที่ไม่พอ */
+        justify-content: center !important;
+    }
+}
 
