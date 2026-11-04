@@ -1804,5 +1804,22 @@ header.navbar, .navbar {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
     box-sizing: border-box !important;
 }
+@media screen and (max-width: 768px) {
+    body, html {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+    }
+    
+    .container, .main-content, .form-container, div, section {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        float: none !important;
+        box-sizing: border-box !important;
+    }
+}
 
 
