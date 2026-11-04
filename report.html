@@ -373,7 +373,7 @@ document.getElementById("reportForm").addEventListener("submit", function(e) {
         document.getElementById("reportForm").reset();
         
         // 👉 เติมบรรทัดนี้เพื่อสั่งให้เปลี่ยนหน้าเว็บหลังกดตกลง (เปลี่ยน 'index.html' เป็นชื่อไฟล์หน้าที่ต้องการให้เด้งไปครับ)
-        window.location.href = "index.html"; 
+        window.location.href = "dashboard.html"; 
     })
     .catch(error => {
         console.error("Error:", error);
@@ -381,7 +381,7 @@ document.getElementById("reportForm").addEventListener("submit", function(e) {
         document.getElementById("reportForm").reset();
         
         // 👉 หรือถ้าจะให้เปลี่ยนหน้ากรณีเข้า catch ด้วย ก็ใส่บรรทัดนี้ไว้เหมือนกันครับ
-        window.location.href = "index.html";
+        window.location.href = "dashboard.html";
     });
 });
 </script>
