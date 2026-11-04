@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - WaterWatch เฝ้าระวังแหล่งน้ำสะเดา</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="about-page">
+
+    <!-- Header / Navbar -->
+    <!-- แทนที่แท็ก header เดิมด้วยชุดนี้ -->
+<header class="navbar" style="position: sticky !important; top: 0 !important; z-index: 99999 !important; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #ffffff !important; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box; width: 100%;">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+        <span class="logo-icon" style="font-size: 24px;">💧</span>
+        <div class="logo-text">
+            <h2 style="margin: 0; font-size: 20px; color: #0077b6;">WaterWatch</h2>
+            <small style="color: #666;">Sadao • Songkhla</small>
+        </div>
+    </div>
+    
+    <nav class="nav-menu">
+        <a href="index.html">Home</a>
+        <a href="report.html">Report</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="knowledge.html">Water Knowledge</a>
+        <a href="about.html" class="active">About</a>
+    </nav>
+
+    <div class="weather-date-widget" style="display: flex; align-items: center; gap: 12px; background: #f0f8ff; padding: 6px 14px; border-radius: 20px; border: 1px solid #b6e0fe;">
+        <span style="font-size: 18px;">🌤️</span>
+        <div style="font-size: 13px; color: #333; line-height: 1.2;">
+            <div id="current-date" style="font-weight: 600; color: #0077b6;">กำลังโหลดวันที่...</div>
+            <div style="color: #555; font-size: 12px;">อ.สะเดา 28°C</div>
+        </div>
+    </div>
+</header> 
+
+    <!-- Hero Header ธีมเฝ้าระวังสายน้ำ -->
+    <header class="about-hero">
+        <div class="about-hero-content">
+            <span class="tagline">― RIVER MONITORING & PROTECTION</span>
+            <h1>ร่วมเฝ้าระวังและฟื้นฟูสายน้ำ<br>เพื่อชุมชนอำเภอสะเดา</h1>
+            <p>เครือข่ายภาคประชาชนในการติดตามคุณภาพน้ำ และปกป้องระบบนิเวศทั้ง 9 ตำบล</p>
+        </div>
+    </header>
+
+    <!-- Content Section -->
+    <main class="about-container">
+
+        <!-- 1. ที่มาและความสำคัญ -->
+        <section class="about-card">
+            <span class="card-badge">ENVIRONMENTAL MISSION</span>
+            <h2>ภารกิจเฝ้าระวังสายน้ำ</h2>
+            <p>
+                อำเภอสะเดา มีสายน้ำธรรมชาติสำคัญอย่างคลองอู่ตะเภาตอนบน คลองปาดังเบซาร์ และคลองทุ่งหมอ ซึ่งเป็นเส้นเลือดใหญ่ในการอุปโภค บริโภค และเกษตรกรรม แต่ปัจจุบันกำลังเผชิญความเสี่ยงจากปัญหาน้ำเสีย ขยะสะสม และสิ่งปฏิกูลตามการเติบโตของเมือง
+            </p>
+            <p>
+                <strong>WaterWatch</strong> จึงถูกพัฒนาขึ้นเพื่อเป็นแพลตฟอร์มการมีส่วนร่วม (Citizen Science) ให้ทุกคนในชุมชนร่วมกันเป็น "ดวงตาเฝ้าระวังสายน้ำ" แจ้งพิกัดและรายงานสถานะความผิดปกติ เพื่อยับยั้งปัญหาน้ำเสียได้ทันท่วงที
+            </p>
+        </section>
+
+        <!-- 2. วัตถุประสงค์ (Grid) -->
+        <section class="about-section-grid">
+            <h2 class="grid-section-title">กลไกการดูแลแหล่งน้ำ</h2>
+            <div class="goals-grid">
+                <div class="goal-item">
+                    <span class="goal-icon">🛡️</span>
+                    <h3>เฝ้าระวังภัยเชิงรุก</h3>
+                    <p>รับแจ้งเหตุและปักพิกัดปัญหาน้ำเสีย/ขยะในพื้นที่ทันทีแบบเรียลไทม์</p>
+                </div>
+                <div class="goal-item">
+                    <span class="goal-icon">🧪</span>
+                    <h3>ติดตามคุณภาพน้ำ</h3>
+                    <p>แสดงผลดัชนีคุณภาพน้ำ (WQI) และสถิติความสะอาดของลำคลองสายหลัก</p>
+                </div>
+                <div class="goal-item">
+                    <span class="goal-icon">🌱</span>
+                    <h3>ฟื้นฟูระบบนิเวศ</h3>
+                    <p>รวบรวมข้อมูลสนับสนุนหน่วยงานและชุมชนในการแก้ปัญหาอย่างยั่งยืน</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. เครื่องมือและเทคโนโลยี -->
+        <section class="about-card tech-card">
+            <span class="card-badge">TECH FOR ENVIRONMENT</span>
+            <h2>เทคโนโลยีที่ใช้พัฒนา (Tech Stack)</h2>
+            <div class="tech-tags">
+                <span class="tech-tag">HTML5 / Semantic Structure</span>
+                <span class="tech-tag">CSS3 / Flexbox & Responsive</span>
+                <span class="tech-tag">JavaScript (ES6+)</span>
+                <span class="tech-tag">Leaflet.js / OpenStreetMap (GIS)</span>
+                <span class="tech-tag">VS Code</span>
+            </div>
+        </section>
+
+<!-- ส่วนข้อมูลผู้พัฒนา (Developer) -->
+<div class="about-card" style="background: #1a2321; border-radius: 16px; padding: 40px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); margin-bottom: 30px; border: 1px solid #2a3b37;">
+    <h2 class="section-title" style="color: #4ade80; text-align: center; font-size: 24px; margin-top: 0; margin-bottom: 30px;">👩‍💻 ผู้พัฒนาโปรเจกต์ (Developer)</h2>
+    
+    <!-- ใช้โครงสร้างแบบตารางหรือบล็อกอิสระ ป้องกัน CSS นอกไฟล์มาดึงตำแหน่ง -->
+    <div style="text-align: center;">
+        
+        <!-- กรอบรูปโปรไฟล์วงกลม -->
+        <div style="width: 180px; height: 180px; border-radius: 50%; overflow: hidden; border: 4px solid #4ade80; box-shadow: 0 8px 20px rgba(74, 222, 128, 0.2); background: #121816; display: inline-block; margin-bottom: 20px;">
+            <img src="6949.jpg" alt="นางสาวธีรดา สุวรรณโณ" style="width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block;">
+        </div>
+        
+        <!-- ข้อมูลรายละเอียดผู้พัฒนา -->
+        <div style="transform: none !important; margin-top: 0 !important;">
+            <div style="margin-bottom: 12px;">
+                <span style="display: inline-block; background: rgba(74, 222, 128, 0.15); color: #4ade80; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;">ผู้พัฒนาและออกแบบระบบ</span>
+            </div>
+            <h3 style="margin: 0 0 10px 0; color: #ffffff; font-size: 24px; font-weight: 600; transform: none !important;">นางสาวธีรดา สุวรรณโณ</h3>
+            <div style="color: #b0bec5; font-size: 15px; line-height: 1.8; transform: none !important;">
+                <p style="margin: 4px 0;">🎓 <strong>ระดับการศึกษา:</strong> ชั้นมัธยมศึกษาปีที่ 6</p>
+                <p style="margin: 4px 0;">📚 <strong>แผนการเรียน:</strong> ศิลป์-ทั่วไป</p>
+                <p style="margin: 4px 0;">🏫 <strong>สถานศึกษา:</strong> โรงเรียนสะเดา "ขรรค์ชัยกัมพลานนท์อนุสรณ์"</p>
+                <p style="margin: 4px 0;">📍 <strong>พื้นที่ดำเนินการ:</strong> อำเภอสะเดา จังหวัดสงขลา</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="story-footer">
+        <div class="footer-content">
+            <h2>WaterWatch Sadao</h2>
+            <p>“ปกป้องสายน้ำสะเดา เพื่ออนาคตที่ยั่งยืนของทุกชีวิต”</p>
+
+        </div>
+    </footer>
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' };
+                const today = new Date().toLocaleDateString('th-TH', options);
+                dateElement.textContent = today;
+            }
+        });
+    </script>
+</body>
+</html>

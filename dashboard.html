@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWatch - แดชบอร์ดสรุปสถานการณ์</title>
+    <!-- Google Fonts Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Container การจัดวาง */
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Stat Cards */
+        .stat-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            padding: 12px;
+            border-radius: 50%;
+            background: #eef6fc;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0077b6;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Charts Grid */
+        .charts-main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-box {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .chart-box h4 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #0077b6;
+            font-size: 16px;
+        }
+
+        /* Bar Item */
+        .chart-bar-item {
+            margin-bottom: 15px;
+        }
+
+        .chart-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .bar-bg {
+            background: #e9ecef;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .bar-fill.blue { background-color: #0077b6; }
+        .bar-fill.green { background-color: #28a745; }
+
+        .charts-grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Table */
+        .table-box {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .table-box h4 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #0077b6;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .report-table th {
+            background-color: #f8f9fa;
+            padding: 12px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .report-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eeeeee;
+            vertical-align: middle;
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <!-- แทนที่แท็ก header เดิมด้วยชุดนี้ -->
+<header class="navbar" style="position: sticky !important; top: 0 !important; z-index: 99999 !important; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #ffffff !important; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box; width: 100%;">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+        <span class="logo-icon" style="font-size: 24px;">💧</span>
+        <div class="logo-text">
+            <h2 style="margin: 0; font-size: 20px; color: #0077b6;">WaterWatch</h2>
+            <small style="color: #666;">Sadao • Songkhla</small>
+        </div>
+    </div>
+    
+    <nav class="nav-menu">
+        <a href="index.html" >Home</a>
+        <a href="report.html">Report</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="knowledge.html">Water Knowledge</a>
+        <a href="about.html">About</a>
+    </nav>
+
+    <div class="weather-date-widget" style="display: flex; align-items: center; gap: 12px; background: #f0f8ff; padding: 6px 14px; border-radius: 20px; border: 1px solid #b6e0fe;">
+        <span style="font-size: 18px;">🌤️</span>
+        <div style="font-size: 13px; color: #333; line-height: 1.2;">
+            <div id="current-date" style="font-weight: 600; color: #0077b6;">กำลังโหลดวันที่...</div>
+            <div style="color: #555; font-size: 12px;">อ.สะเดา 28°C</div>
+        </div>
+    </div>
+</header>
+
+    <div class="dashboard-container">
+        <h2 style="color: #0077b6; margin-bottom: 20px;">📊 แดชบอร์ดสรุปสถานการณ์คุณภาพน้ำ</h2>
+
+        <!-- 1. การ์ดสรุปตัวเลขภาพรวม -->
+        <div class="stat-cards-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📍</div>
+                <div>
+                    <div class="stat-number" id="total-reports">0</div>
+                    <div class="stat-label">รายงานทั้งหมด</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚠️</div>
+                <div>
+                    <div class="stat-number" id="pending-reports" style="color: #ff9800;">0</div>
+                    <div class="stat-label">กำลังดำเนินการ</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div>
+                    <div class="stat-number" id="resolved-reports" style="color: #4caf50;">0</div>
+                    <div class="stat-label">แก้ไขเรียบร้อย</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. ส่วนแสดงกราฟสถิติ -->
+        <div class="charts-main-grid">
+            
+            <!-- สัดส่วนประเภทปัญหา -->
+            <div class="chart-box">
+                <h4>💧 สัดส่วนประเภทปัญหา</h4>
+                <div id="problem-chart-container">
+                    <div class="chart-bar-item">
+                        <div class="chart-bar-label">
+                            <span>💧 น้ำเน่าเสีย</span>
+                            <span id="prob-val-1">0%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill blue" id="prob-bar-1" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="chart-bar-item">
+                        <div class="chart-bar-label">
+                            <span>🗑️ ขยะในแหล่งน้ำ</span>
+                            <span id="prob-val-2">0%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill blue" id="prob-bar-2" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="chart-bar-item">
+                        <div class="chart-bar-label">
+                            <span>🌊 น้ำท่วม/น้ำหลาก</span>
+                            <span id="prob-val-3">0%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill blue" id="prob-bar-3" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="chart-bar-item">
+                        <div class="chart-bar-label">
+                            <span>⚠️ อื่นๆ</span>
+                            <span id="prob-val-4">0%</span>
+                        </div>
+                        <div class="bar-bg"><div class="bar-fill blue" id="prob-bar-4" style="width: 0%;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- สถิติการแจ้งเตือนแยกตาม 9 ตำบล -->
+            <div class="chart-box">
+                <h4>🗺️ สถิติการแจ้งเตือนแยกตาม 9 ตำบล ใน อ.สะเดา</h4>
+                <div class="charts-grid-2col" id="location-chart-container">
+                    <div>
+                        <div class="chart-bar-item" data-loc="ต.สะเดา">
+                            <div class="chart-bar-label"><span>ต.สะเดา</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                        <div class="chart-bar-item" data-loc="ต.ปาดังเบซาร์">
+                            <div class="chart-bar-label"><span>ต.ปาดังเบซาร์</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                        <div class="chart-bar-item" data-loc="ต.ปริก">
+                            <div class="chart-bar-label"><span>ต.ปริก</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                        <div class="chart-bar-item" data-loc="ต.ทุ่งหมอ">
+                            <div class="chart-bar-label"><span>ต.ทุ่งหมอ</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                        <div class="chart-bar-item" data-loc="ต.สำนักขาม">
+                            <div class="chart-bar-label"><span>ต.สำนักขาม</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="chart-bar-item" data-loc="ต.สำนักแต้ว">
+                            <div class="chart-bar-label"><span>ต.สำนักแต้ว</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                        <div class="chart-bar-item" data-loc="ต.พะตง">
+                            <div class="chart-bar-label"><span>ต.พะตง</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                        <div class="chart-bar-item" data-loc="ต.ท่าโพธิ์">
+                            <div class="chart-bar-label"><span>ต.ท่าโพธิ์</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                        <div class="chart-bar-item" data-loc="ต.เขาสามยอด">
+                            <div class="chart-bar-label"><span>ต.เขาสามยอด</span><span class="loc-percent">0%</span></div>
+                            <div class="bar-bg"><div class="bar-fill green" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 3. ตารางรายการแจ้งปัญหาล่าสุด -->
+        <div class="table-box">
+            <h4>📋 รายการแจ้งปัญหาล่าสุด</h4>
+            <div style="overflow-x: auto;">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>รูปภาพ</th>
+                            <th>เวลาที่แจ้ง</th>
+                            <th>พื้นที่ / ตำบล</th>
+                            <th>หัวข้อเรื่องที่แจ้ง</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-table-body">
+                        <!-- รายการจาก localStorage จะถูกเรนเดอร์มาใส่ตรงนี้ -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script สำหรับดึงข้อมูลและประมวลผลสถิติ -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. ดึงข้อมูลจาก localStorage
+            const reports = JSON.parse(localStorage.getItem('waterWatchReports')) || [];
+            const totalReports = reports.length;
+
+            // อัปเดตตัวเลขการ์ดสรุป
+            document.getElementById('total-reports').textContent = totalReports;
+            document.getElementById('pending-reports').textContent = totalReports; // ตั้งเริ่มต้นเป็นรอตรวจสอบ
+            document.getElementById('resolved-reports').textContent = 0;
+
+            // 2. ประมวลผลประเภทปัญหา
+            let probCounts = {
+                "น้ำเน่าเสีย": 0,
+                "ขยะในแหล่งน้ำ": 0,
+                "น้ำท่วม/น้ำหลาก": 0,
+                "อื่นๆ": 0
+            };
+
+            // 3. ประมวลผล 9 ตำบล
+            let locCounts = {
+                "ต.สะเดา": 0,
+                "ต.สำนักแต้ว": 0,
+                "ต.ปาดังเบซาร์": 0,
+                "ต.พะตง": 0,
+                "ต.ปริก": 0,
+                "ต.ท่าโพธิ์": 0,
+                "ต.ทุ่งหมอ": 0,
+                "ต.เขาสามยอด": 0,
+                "ต.สำนักขาม": 0
+            };
+
+            // วนลูปนับจำนวน
+            reports.forEach(rep => {
+                // แยกประเภทปัญหา
+                let title = (rep.title || "").trim();
+                if (probCounts.hasOwnProperty(title)) {
+                    probCounts[title]++;
+                } else if (title.includes("น้ำเน่า") || title.includes("คุณภาพน้ำ")) {
+                    probCounts["น้ำเน่าเสีย"]++;
+                } else if (title.includes("ขยะ")) {
+                    probCounts["ขยะในแหล่งน้ำ"]++;
+                } else if (title.includes("ท่วม") || title.includes("หลาก")) {
+                    probCounts["น้ำท่วม/น้ำหลาก"]++;
+                } else {
+                    probCounts["อื่นๆ"]++;
+                }
+
+                // แยกตำบล
+                let loc = (rep.location || "").trim();
+                if (locCounts.hasOwnProperty(loc)) {
+                    locCounts[loc]++;
+                } else {
+                    // ค้นหาคำที่ตรงกันกรณีชื่อไม่เป๊ะ
+                    Object.keys(locCounts).forEach(k => {
+                        if (loc.includes(k.replace("ต.", ""))) {
+                            locCounts[k]++;
+                        }
+                    });
+                }
+            });
+
+            // 4. แสดงผลกราฟสัดส่วนประเภทปัญหา
+            const getPercentStr = (count) => totalReports > 0 ? Math.round((count / totalReports) * 100) + "%" : "0%";
+            const getPercentVal = (count) => totalReports > 0 ? (count / totalReports) * 100 : 0;
+
+            document.getElementById('prob-val-1').textContent = getPercentStr(probCounts["น้ำเน่าเสีย"]);
+            document.getElementById('prob-bar-1').style.width = getPercentVal(probCounts["น้ำเน่าเสีย"]) + "%";
+
+            document.getElementById('prob-val-2').textContent = getPercentStr(probCounts["ขยะในแหล่งน้ำ"]);
+            document.getElementById('prob-bar-2').style.width = getPercentVal(probCounts["ขยะในแหล่งน้ำ"]) + "%";
+
+            document.getElementById('prob-val-3').textContent = getPercentStr(probCounts["น้ำท่วม/น้ำหลาก"]);
+            document.getElementById('prob-bar-3').style.width = getPercentVal(probCounts["น้ำท่วม/น้ำหลาก"]) + "%";
+
+            document.getElementById('prob-val-4').textContent = getPercentStr(probCounts["อื่นๆ"]);
+            document.getElementById('prob-bar-4').style.width = getPercentVal(probCounts["อื่นๆ"]) + "%";
+
+            // 5. แสดงผลกราฟแท่ง 9 ตำบล
+            const locItems = document.querySelectorAll('#location-chart-container .chart-bar-item');
+            locItems.forEach(item => {
+                const locName = item.getAttribute('data-loc');
+                if (locName && locCounts.hasOwnProperty(locName)) {
+                    const count = locCounts[locName];
+                    const percentStr = getPercentStr(count);
+                    const percentVal = getPercentVal(count);
+
+                    const percentSpan = item.querySelector('.loc-percent');
+                    const barFill = item.querySelector('.bar-fill');
+
+                    if (percentSpan) percentSpan.textContent = percentStr;
+                    if (barFill) barFill.style.width = percentVal + "%";
+                }
+            });
+
+            // 6. เรนเดอร์รายการแจ้งปัญหาล่าสุดลงตาราง
+            const tbody = document.getElementById('report-table-body');
+            if (tbody) {
+                if (reports.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888; padding: 20px;">ยังไม่มีรายการแจ้งปัญหาเข้ามา</td></tr>`;
+                } else {
+                    let tableHTML = '';
+                    reports.forEach(item => {
+                        const imgHTML = item.image 
+                            ? `<img src="${item.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">` 
+                            : `<div style="width:50px; height:50px; background:#eee; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#888; font-size:10px;">ไม่มีรูป</div>`;
+
+                        tableHTML += `
+                            <tr>
+                                <td>${imgHTML}</td>
+                                <td>${item.time || '-'}</td>
+                                <td>📍 ${item.location || 'อ.สะเดา'}</td>
+                                <td><strong>${item.title || 'แจ้งปัญหาคุณภาพน้ำ'}</strong></td>
+                                <td><span class="badge-status">${item.status || 'รอตรวจสอบ'}</span></td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = tableHTML;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

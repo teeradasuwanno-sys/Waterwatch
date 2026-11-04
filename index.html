@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWatch - เฝ้าระวังแหล่งน้ำในอำเภอสะเดา</title>
+    <!-- Google Fonts Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+   <!-- แทนที่แท็ก header เดิมด้วยชุดนี้ -->
+<header class="navbar" style="position: sticky !important; top: 0 !important; z-index: 99999 !important; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #ffffff !important; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box; width: 100%;">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+        <span class="logo-icon" style="font-size: 24px;">💧</span>
+        <div class="logo-text">
+            <h2 style="margin: 0; font-size: 20px; color: #0077b6;">WaterWatch</h2>
+            <small style="color: #666;">Sadao • Songkhla</small>
+        </div>
+    </div>
+    
+    <nav class="nav-menu">
+        <a href="index.html" class="active">Home</a>
+        <a href="report.html">Report</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="knowledge.html">Water Knowledge</a>
+        <a href="about.html">About</a>
+    </nav>
+
+    <div class="weather-date-widget" style="display: flex; align-items: center; gap: 12px; background: #f0f8ff; padding: 6px 14px; border-radius: 20px; border: 1px solid #b6e0fe;">
+        <span style="font-size: 18px;">🌤️</span>
+        <div style="font-size: 13px; color: #333; line-height: 1.2;">
+            <div id="current-date" style="font-weight: 600; color: #0077b6;">กำลังโหลดวันที่...</div>
+            <div style="color: #555; font-size: 12px;">อ.สะเดา 28°C</div>
+        </div>
+    </div>
+</header>
+
+    <!-- Hero Section (ดีไซน์ตามรูปตัวอย่าง) -->
+   <!-- Hero Section (ดึงรูปสวยๆ จาก Unsplash มาใส่) -->
+    <section class="hero-section" style="position: relative; padding: 60px 5%; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat; color: white; display: flex; justify-content: space-between; align-items: center; overflow: hidden;">
+        <div class="hero-content" style="max-width: 650px; z-index: 2;">
+            <h2 style="font-size: 24px; font-weight: 400; margin: 0; color: #b6e0fe;">WaterWatch</h2>
+            <h1 style="font-size: 42px; margin: 5px 0 15px 0; font-weight: 700;">เฝ้าระวังแหล่งน้ำในอำเภอสะเดา</h1>
+            <p style="font-size: 15px; line-height: 1.6; margin-bottom: 25px; color: #f0f0f0;">
+                ระบบติดตามและรายงานปัญหาคุณภาพแหล่งน้ำในพื้นที่อำเภอสะเดา จังหวัดสงขลา เพื่อให้ชุมชนสามารถรับรู้สถานการณ์และร่วมดูแลแหล่งน้ำได้อย่างมีประสิทธิภาพ
+            </p>
+            <div class="hero-buttons" style="display: flex; gap: 15px;">
+                <a href="#map-section" class="btn btn-primary" style="padding: 10px 22px; background: #0096c7; color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">ดูแผนที่แหล่งน้ำ →</a>
+                <a href="report.html" class="btn btn-warning" style="padding: 10px 22px; background: #ffb703; color: #333; border-radius: 6px; text-decoration: none; font-weight: 500;">รายงานปัญหา →</a>
+            </div>
+        </div>
+
+        <!-- กล่องคำขวัญฝั่งขวา -->
+        <div class="hero-quote-box" style="z-index: 2; background: rgba(0, 119, 182, 0.85); padding: 25px 30px; border-left: 5px solid #ffb703; border-radius: 8px; backdrop-filter: blur(4px); max-width: 320px;">
+            <p style="margin: 0; font-size: 18px; font-weight: 600; color: #fff; line-height: 1.5;">“ร่วมดูแลแหล่งน้ำ” เพื่อชุมชนที่ยั่งยืน</p>
+        </div>
+    </section>
+
+    <!-- Status Bar (แถบสถิติสถานการณ์) -->
+    <section class="water-status-bar" style="display: flex; justify-content: space-around; background: #fff; padding: 20px 5%; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 20px auto; max-width: 1200px; border-radius: 12px; flex-wrap: wrap; gap: 15px;">
+        <div class="status-item" style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 22px;">💧</span>
+            <div>
+                <div style="font-size: 13px; color: #666;">สถานการณ์แหล่งน้ำ</div>
+                <div style="font-weight: 600; color: #333; font-size: 14px;">ใน อ.สะเดา ล่าสุด</div>
+            </div>
+        </div>
+        <div class="status-item" style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 22px;">✅</span>
+            <div>
+                <div style="font-size: 13px; color: #666;">ได้รับการตรวจสอบแล้ว</div>
+                <div style="font-weight: 600; color: #28a745; font-size: 15px;" id="count-verified">0 จุด</div>
+            </div>
+        </div>
+        <div class="status-item" style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 22px;">⚠️</span>
+            <div>
+                <div style="font-size: 13px; color: #666;">รอตรวจสอบ</div>
+                <div style="font-weight: 600; color: #ffc107; font-size: 15px;" id="count-pending">0 จุด</div>
+            </div>
+        </div>
+        <div class="status-item" style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 22px;">🚨</span>
+            <div>
+                <div style="font-size: 13px; color: #666;">พบปัญหาทั้งหมด</div>
+                <div style="font-weight: 600; color: #dc3545; font-size: 15px;" id="count-problem">0 จุด</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Grid (Map & Latest Reports) -->
+    <main id="map-section" style="max-width: 1200px; margin: 0 auto 40px; padding: 0 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+        
+        <!-- แผนที่ Leaflet -->
+        <div class="map-container-box" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: #0077b6;">🗺️ แผนที่คุณภาพน้ำ (อ.สะเดา)</h3>
+                <button onclick="locateUser()" style="padding: 6px 12px; background: #0077b6; color: white; border: none; border-radius: 4px; cursor: pointer;">📍 ดึงตำแหน่ง GPS ของฉัน</button>
+            </div>
+            <div id="map" style="width: 100%; height: 400px; border-radius: 8px;"></div>
+        </div>
+
+        <!-- รายงานล่าสุด -->
+        <div class="reports-section" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: #333; font-size: 18px;">📢 รายงานล่าสุด</h3>
+                <a href="dashboard.html" class="link-more" style="color: #0077b6; text-decoration: none; font-size: 13px;">ดูรายงานทั้งหมด →</a>
+            </div>
+            <div id="latest-reports-container">
+                <p style="color: #666; font-size: 14px; text-align: center; padding: 20px 0;">ยังไม่มีรายงานในระบบ</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var map;
+        window.onload = function() {
+            var sadaoLat = 6.6437;
+            var sadaoLng = 100.4172;
+
+            // 1. ตั้งค่าแผนที่ศูนย์กลาง อ.สะเดา
+            map = L.map('map').setView([sadaoLat, sadaoLng], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            // 2. ดึงข้อมูลรายงานจาก localStorage มาแสดงผลและปักหมุด
+            const reports = JSON.parse(localStorage.getItem('waterWatchReports')) || [];
+            
+            let verifiedCount = 0;
+            let pendingCount = 0;
+            let problemCount = reports.length;
+
+            const reportsContainer = document.getElementById('latest-reports-container');
+            let reportsHTML = '';
+
+            if (reports.length === 0) {
+                reportsContainer.innerHTML = `<p style="color: #666; font-size: 14px; text-align: center; padding: 20px 0;">ยังไม่มีรายงานในระบบ</p>`;
+            } else {
+                reports.forEach((item, index) => {
+                    // นับสถานะ
+                    if (item.status === 'แก้ไขเรียบร้อย' || item.status === 'ตรวจสอบแล้ว') {
+                        verifiedCount++;
+                    } else {
+                        pendingCount++;
+                    }
+
+                    // ปักหมุดบนแผนที่
+                    if (item.lat && item.lng) {
+                        L.marker([item.lat, item.lng]).addTo(map)
+                            .bindPopup(`<b>${item.title}</b><br>📍 ${item.location}<br>สถานะ: ${item.status}`);
+                    }
+
+                    // แสดงรายการล่าสุด (เอาแค่ 3 รายการแรก)
+                    if (index < 3) {
+                        reportsHTML += `
+                            <div class="report-card" style="padding: 10px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px; background: #fafafa;">
+                                <h4 style="margin: 0 0 4px 0; font-size: 14px; color: #333;">${item.title}</h4>
+                                <small style="color: #666;">📍 ${item.location} • ${item.time}</small>
+                                <div style="margin-top: 4px;"><span style="font-size: 11px; padding: 2px 6px; background: #fff3cd; color: #856404; border-radius: 4px;">${item.status}</span></div>
+                            </div>`;
+                    }
+                });
+                reportsContainer.innerHTML = reportsHTML;
+            }
+
+            // อัปเดตตัวเลขสถิติสถานการณ์แหล่งน้ำ
+            document.getElementById('count-verified').textContent = `${verifiedCount} จุด`;
+            document.getElementById('count-pending').textContent = `${pendingCount} จุด`;
+            document.getElementById('count-problem').textContent = `${problemCount} จุด`;
+
+            setTimeout(function() { map.invalidateSize(); }, 300);
+        };
+
+        // ฟังก์ชันดึงพิกัด GPS ผู้ใช้
+        function locateUser() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    map.setView([lat, lng], 15);
+                    L.marker([lat, lng]).addTo(map)
+                        .bindPopup("📍 ตำแหน่งปัจจุบันของคุณ").openPopup();
+                }, function() {
+                    alert("ไม่สามารถเข้าถึงตำแหน่งของคุณได้");
+                });
+            } else {
+                alert("เบราว์เซอร์ของคุณไม่รองรับการระบุตำแหน่ง");
+            }
+        }
+    </script>
+</body>
+</html>

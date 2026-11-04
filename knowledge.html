@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Knowledge - เฝ้าระวังแหล่งน้ำในอำเภอสะเดา</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* สไตล์หน้า Knowledge แบบใช้ Navbar แถบสีขาวเหมือนหน้า Report */
+        body.knowledge-page {
+            background-color: #286651;
+            color: #e2f1ed;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        /* Navbar แถบสีขาวทึบ แบบเดียวกับหน้า Report */
+        body.knowledge-page header.navbar {
+            position: relative !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 75px !important;
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 0 60px !important;
+            box-sizing: border-box !important;
+            z-index: 1000 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        body.knowledge-page .navbar .logo {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
+
+        body.knowledge-page .navbar .logo-icon {
+            font-size: 1.8rem !important;
+        }
+
+        body.knowledge-page .navbar .logo-text h2 {
+            color: #0077b6 !important;
+            font-size: 1.3rem !important;
+            margin: 0 !important;
+            font-weight: 700 !important;
+            line-height: 1.1 !important;
+        }
+
+        body.knowledge-page .navbar .logo-text small {
+            color: #6c757d !important;
+            font-size: 0.75rem !important;
+            display: block !important;
+        }
+
+        body.knowledge-page .navbar .nav-menu {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 32px !important;
+            align-items: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.knowledge-page .navbar .nav-menu a {
+            color: #2b2d42 !important;
+            text-decoration: none !important;
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+            white-space: nowrap !important;
+        }
+
+        body.knowledge-page .navbar .nav-menu a.active,
+        body.knowledge-page .navbar .nav-menu a:hover {
+            color: #0077b6 !important;
+            font-weight: 600 !important;
+        }
+
+        body.knowledge-page .navbar .auth-btn .btn-login {
+            background-color: #0077b6 !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 9px 24px !important;
+            border-radius: 20px !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+            font-family: 'Prompt', sans-serif !important;
+        }
+
+        /* Hero Banner สไตล์คลังความรู้แบบต่อเนื่องด้านล่าง */
+        .editorial-hero {
+            position: relative;
+            padding: 80px 20px 80px 20px;
+            background: linear-gradient(180deg, #3f8079 0%, #31775f 100%);
+            text-align: center;
+            border-bottom: 1px solid rgba(31, 92, 85, 0.15);
+        }
+
+        .editorial-hero .tagline {
+            color: #4ea89d;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .editorial-hero h1 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            line-height: 1.3;
+            margin-bottom: 15px;
+        }
+
+        .editorial-hero p {
+            color: #b7e4c7;
+            font-size: 1.05rem;
+            font-weight: 300;
+        }
+
+        /* Editorial Content Layout */
+        .editorial-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 40px 120px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 140px;
+        }
+
+        .story-item {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .story-item.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .story-item .big-number {
+            position: absolute;
+            top: -85px;
+            left: -20px;
+            font-size: 13rem;
+            font-weight: 700;
+            color: rgba(255, 236, 236, 0.04);
+            line-height: 1;
+            z-index: 1;
+            pointer-events: none;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .story-item.reverse .big-number {
+            left: auto;
+            right: -20px;
+        }
+
+        .story-text {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .story-text .card-badge {
+            color: #2a7e63;
+            font-size: 0.8rem;
+            letter-spacing: 2.5px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .story-text h2 {
+            font-size: 2rem;
+            color: #ffffff;
+            line-height: 1.35;
+            margin-bottom: 18px;
+        }
+
+        .story-text p {
+            color: #b7e4c7;
+            font-size: 0.98rem;
+            line-height: 1.85;
+            margin-bottom: 22px;
+            font-weight: 300;
+        }
+
+        .story-text .read-more {
+            color: #4ea89d;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        .story-image {
+            flex: 0 0 420px;
+            height: 500px;
+            z-index: 2;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(78, 168, 157, 0.2);
+        }
+
+        .story-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-footer {
+            background-color: #174937;
+            padding: 50px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(78, 168, 157, 0.1);
+        }
+
+        .story-footer h2 { color: #ffffff; margin-bottom: 8px; }
+        .story-footer p { color: #8bbfae; margin-bottom: 20px; font-weight: 300; }
+        .story-footer span { color: #4e7a6c; font-size: 0.8rem; }
+    </style>
+</head>
+<body class="knowledge-page">
+
+    <!-- Header / Navbar แถบขาวสไตล์หน้า Report -->
+    <!-- แทนที่แท็ก header เดิมด้วยชุดนี้ -->
+<header class="navbar" style="position: sticky !important; top: 0 !important; z-index: 99999 !important; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #ffffff !important; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box; width: 100%;">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+        <span class="logo-icon" style="font-size: 24px;">💧</span>
+        <div class="logo-text">
+            <h2 style="margin: 0; font-size: 20px; color: #0077b6;">WaterWatch</h2>
+            <small style="color: #666;">Sadao • Songkhla</small>
+        </div>
+    </div>
+    
+    <nav class="nav-menu">
+        <a href="index.html" >Home</a>
+        <a href="report.html">Report</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="knowledge.html" class="active">Water Knowledge</a>
+        <a href="about.html">About</a>
+    </nav>
+
+    <div class="weather-date-widget" style="display: flex; align-items: center; gap: 12px; background: #f0f8ff; padding: 6px 14px; border-radius: 20px; border: 1px solid #b6e0fe;">
+        <span style="font-size: 18px;">🌤️</span>
+        <div style="font-size: 13px; color: #333; line-height: 1.2;">
+            <div id="current-date" style="font-weight: 600; color: #0077b6;">กำลังโหลดวันที่...</div>
+            <div style="color: #555; font-size: 12px;">อ.สะเดา 28°C</div>
+        </div>
+    </div>
+</header>
+    <!-- Hero Section -->
+    <section class="editorial-hero">
+        <div class="hero-content">
+            <span class="tagline">― WATER KNOWLEDGE GUIDE</span>
+            <h1>คลังความรู้และเรื่องราวน้ำ<br>ในอำเภอสะเดา</h1>
+            <p>“สายน้ำแห่งชีวิต ที่หล่อเลี้ยงชุมชนและธรรมชาติทั้ง 9 ตำบล”</p>
+        </div>
+    </section>
+
+    <!-- Main Content: บทความสลับซ้าย-ขวาสไตล์ Editorial -->
+    <main class="editorial-container">
+
+        <!-- Article 01 -->
+        <article class="story-item">
+            <span class="big-number">01</span>
+            <div class="story-text">
+                <span class="card-badge">― GET STARTED</span>
+                <h2>สถานการณ์น้ำและเส้นทางสายน้ำในอำเภอสะเดา</h2>
+                <p>
+                    อำเภอสะเดา มีสายน้ำธรรมชาติสำคัญอย่างคลองอู่ตะเภาตอนบน คลองปาดังเบซาร์ และคลองทุ่งหมอ ซึ่งเป็นเส้นเลือดใหญ่ในการอุปโภค บริโภค และการเกษตรของทั้ง 9 ตำบล แต่การขยายตัวของชุมชนและโรงงานอุตสาหกรรมในพื้นที่ชายแดน ส่งผลให้เกิดปัญหาน้ำเสียสะสมและขยะตกค้างในลำคลองหลายจุด
+                </p>
+            </div>
+            <div class="story-image">
+                <img src="https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?q=80&w=800&auto=format&fit=crop" alt="สายน้ำธรรมชาติ สะเดา">
+            </div>
+        </article>
+
+        <!-- Article 02 (สลับด้าน) -->
+        <article class="story-item reverse">
+            <span class="big-number">02</span>
+            <div class="story-text">
+                <span class="card-badge">― WATER ESSENTIALS</span>
+                <h2>การตรวจวัดคุณภาพน้ำเบื้องต้น (WQI)</h2>
+                <p>
+                    ดัชนีคุณภาพน้ำ (Water Quality Index) ช่วยให้เราเข้าใจสถานะของแหล่งน้ำได้ง่ายขึ้น ผ่านการสังเกตสี กลิ่น คราบน้ำมัน และการตรวจวัดค่าออกซิเจนละลายน้ำ (DO) รวมถึงค่าความเป็นกรด-ด่าง (pH) การเฝ้าระวังและเก็บข้อมูลอย่างต่อเนื่อง จะช่วยยับยั้งวิกฤตสิ่งแวดล้อมทางน้ำได้ทันท่วงที
+                </p>
+            </div>
+            <div class="story-image">
+                <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=800&auto=format&fit=crop" alt="การตรวจคุณภาพน้ำ">
+            </div>
+        </article>
+
+        <!-- Article 03 -->
+        <article class="story-item">
+            <span class="big-number">03</span>
+            <div class="story-text">
+                <span class="card-badge">― CITIZEN SCIENCE</span>
+                <h2>พลังชุมชนและเยาวชนกับการปกป้องสายน้ำ</h2>
+                <p>
+                    การดูแลแม่น้ำลำคลองอย่างยั่งยืน ต้องอาศัยการมีส่วนร่วมของคนในท้องถิ่น เว็บแอปพลิเคชัน WaterWatch เปิดโอกาสให้เยาวชนและประชาชนใน อ.สะเดา ร่วมเป็น "ดวงตาเฝ้าระวัง" แจ้งพิกัดจุดเสี่ยง ส่งรูปภาพปัญหา เพื่อสร้างฐานข้อมูลเปิดในการฟื้นฟูระบบนิเวศร่วมกัน
+                </p>
+            </div>
+            <div class="story-image">
+                <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=800&auto=format&fit=crop" alt="อนุรักษ์สิ่งแวดล้อม">
+            </div>
+        </article>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="story-footer">
+        <div class="footer-content">
+            <h2>WaterWatch Sadao</h2>
+            <p>“รักษาสายน้ำวันนี้ เพื่อชีวิตที่ยั่งยืนของทุกชีวิต”</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' };
+                const today = new Date().toLocaleDateString('th-TH', options);
+                dateElement.textContent = today;
+            }
+        });
+    </script>
+
+</body>
+</html>

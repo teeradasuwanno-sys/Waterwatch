@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWatch - เลือกตำแหน่งบนแผนที่</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', sans-serif;
+            background: #eef6f9;
+        }
+        .map-header {
+            background: #ffffff;
+            padding: 15px 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .map-header h2 {
+            margin: 0;
+            color: #004d61;
+            font-size: 20px;
+        }
+        .btn-back {
+            text-decoration: none;
+            background: #f4f7f9;
+            color: #455a64;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        #map {
+            width: 100%;
+            height: calc(100vh - 70px);
+        }
+        /* กล่องควบคุมลอยบนแผนที่ */
+        .map-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .btn-gps {
+            background: #e1f5fe;
+            color: #0277bd;
+            border: 1px solid #81d4fa;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-confirm {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="map-header">
+        <h2>🗺️ เลือกตำแหน่งจุดที่พบปัญหาใน อ.สะเดา</h2>
+        <a href="report.html" class="btn-back">⬅️ กลับหน้าฟอร์มรายงาน</a>
+    </div>
+
+    <!-- แผนที่แสดงผล -->
+    <div id="map"></div>
+
+    <!-- ปุ่มควบคุมด้านล่าง -->
+    <div class="map-controls">
+        <button type="button" class="btn-gps" id="btnMyGps">
+            📍 ดึงพิกัด GPS ของฉัน
+        </button>
+        <span id="selectedCoords" style="font-size: 14px; color: #555;">คลิกบนแผนที่เพื่อปักหมุด</span>
+        <button type="button" class="btn-confirm" id="btnConfirmLocation" style="display:none;">
+            ✔️ ยืนยันตำแหน่งนี้
+        </button>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ตั้งค่าพิกัดเริ่มต้นที่อำเภอสะเดา จ.สงขลา
+        const sadaoCoords = [6.6437, 100.4168];
+        const map = L.map('map').setView(sadaoCoords, 13);
+
+        // โหลดแผนที่ OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        let currentMarker = null;
+        const coordsText = document.getElementById('selectedCoords');
+        const btnConfirm = document.getElementById('btnConfirmLocation');
+
+        // ฟังก์ชันปักหมุดบนแผนที่
+        function placeMarker(lat, lng) {
+            if (currentMarker) {
+                map.removeLayer(currentMarker);
+            }
+            currentMarker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            
+            coordsText.innerHTML = `📌 พิกัด: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            btnConfirm.style.display = 'inline-block';
+
+            // ถ้าลากหมุดเปลี่ยนตำแหน่ง
+            currentMarker.on('dragend', function(event) {
+                const markerPos = event.target.getLatLng();
+                coordsText.innerHTML = `📌 พิกัด: ${markerPos.lat.toFixed(4)}, ${markerPos.lng.toFixed(4)}`;
+            });
+        }
+
+        // คลิกบนแผนที่เพื่อเลือกตำแหน่ง
+        map.on('click', function(e) {
+            placeMarker(e.latlng.lat, e.latlng.lng);
+        });
+
+        // ปุ่มดึง GPS ปัจจุบันของผู้ใช้
+        document.getElementById('btnMyGps').addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        map.setView([lat, lng], 16);
+                        placeMarker(lat, lng);
+                    },
+                    (error) => {
+                        alert('ไม่สามารถดึงตำแหน่ง GPS ได้ กรุณาอนุญาตการเข้าถึงตำแหน่ง');
+                    }
+                );
+            } else {
+                alert('เบราว์เซอร์ไม่รองรับ Geolocation');
+            }
+        });
+
+        // ปุ่มยืนยันพิกัด (จำลองการส่งค่ากลับหรือแจ้งเตือนสำเร็จ)
+        btnConfirm.addEventListener('click', () => {
+            const pos = currentMarker.getLatLng();
+            alert(`บันทึกตำแหน่งพิกัด: ${pos.lat.toFixed(4)}, ${pos.lng.toFixed(4)} เรียบร้อย!`);
+            window.location.href = `report.html?lat=${pos.lat.toFixed(4)}&lng=${pos.lng.toFixed(4)}`;
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWatch - รายงานปัญหาคุณภาพแหล่งน้ำ</title>
+    <!-- Google Fonts Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Leaflet CSS สำหรับแสดงแผนที่ -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        /* สไตล์ปุ่มเลือกประเภทปัญหา */
+        .problem-btn {
+            padding: 10px 18px;
+            border: 2px solid #e0e0e0;
+            background: #ffffff;
+            color: #444;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        .problem-btn:hover {
+            border-color: #0077b6;
+            color: #0077b6;
+        }
+        .problem-btn.active {
+            background: #0077b6 !important;
+            color: #ffffff !important;
+            border-color: #0077b6 !important;
+            box-shadow: 0 4px 8px rgba(0, 119, 182, 0.25);
+        }
+
+        /* สไตล์ Popup กล่องสีขาวตรงกลาง */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            font-family: 'Prompt', sans-serif;
+        }
+    </style>
+</head>
+<body style="font-family: 'Prompt', sans-serif; background-color: #f4f7f6; margin: 0; padding: 0;">
+
+    <!-- Header / Navbar -->
+   <!-- แทนที่แท็ก header เดิมด้วยชุดนี้ -->
+<header class="navbar" style="position: sticky !important; top: 0 !important; z-index: 99999 !important; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #ffffff !important; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box; width: 100%;">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+        <span class="logo-icon" style="font-size: 24px;">💧</span>
+        <div class="logo-text">
+            <h2 style="margin: 0; font-size: 20px; color: #0077b6;">WaterWatch</h2>
+            <small style="color: #666;">Sadao • Songkhla</small>
+        </div>
+    </div>
+    
+    <nav class="nav-menu">
+        <a href="index.html">Home</a>
+        <a href="report.html" class="active">Report</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="knowledge.html">Water Knowledge</a>
+        <a href="about.html">About</a>
+    </nav>
+
+    <div class="weather-date-widget" style="display: flex; align-items: center; gap: 12px; background: #f0f8ff; padding: 6px 14px; border-radius: 20px; border: 1px solid #b6e0fe;">
+        <span style="font-size: 18px;">🌤️</span>
+        <div style="font-size: 13px; color: #333; line-height: 1.2;">
+            <div id="current-date" style="font-weight: 600; color: #0077b6;">กำลังโหลดวันที่...</div>
+            <div style="color: #555; font-size: 12px;">อ.สะเดา 28°C</div>
+        </div>
+    </div>
+</header>
+
+    <!-- Main Form Section -->
+    <main style="max-width: 700px; margin: 40px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+        <h2 style="color: #0077b6; margin-top: 0; margin-bottom: 20px; text-align: center;">📝 แบบฟอร์มรายงานปัญหาแหล่งน้ำ</h2>
+        
+        <form id="water-report-form" style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <!-- ประเภทปัญหา (กดเลือกปุ่ม) -->
+            <div>
+                <label style="display: block; font-weight: 500; margin-bottom: 8px; color: #333;">ประเภทปัญหาคุณภาพน้ำ:</label>
+                <input type="hidden" id="report-title" name="title" required>
+                <div id="problem-btn-group" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button type="button" class="problem-btn" data-value="น้ำเน่าเสีย">💧 น้ำเน่าเสีย</button>
+                    <button type="button" class="problem-btn" data-value="ขยะในแหล่งน้ำ">🗑️ ขยะในแหล่งน้ำ</button>
+                    <button type="button" class="problem-btn" data-value="น้ำท่วม/น้ำหลาก">🌊 น้ำท่วม/น้ำหลาก</button>
+                    <button type="button" class="problem-btn" data-value="อื่นๆ">⚠️ อื่นๆ</button>
+                </div>
+            </div>
+
+            <!-- ตำบลใน อ.สะเดา -->
+            <div>
+                <label for="report-location" style="display: block; font-weight: 500; margin-bottom: 8px; color: #333;">พื้นที่ / ตำบลใน อ.สะเดา:</label>
+                <select id="report-location" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Prompt', sans-serif; font-size: 14px;" required>
+                    <option value="" disabled selected>-- เลือกตำบล --</option>
+                    <option value="ต.สะเดา">ต.สะเดา</option>
+                    <option value="ต.สำนักแต้ว">ต.สำนักแต้ว</option>
+                    <option value="ต.ปาดังเบซาร์">ต.ปาดังเบซาร์</option>
+                    <option value="ต.พะตง">ต.พะตง</option>
+                    <option value="ต.ปริก">ต.ปริก</option>
+                    <option value="ต.ท่าโพธิ์">ต.ท่าโพธิ์</option>
+                    <option value="ต.ทุ่งหมอ">ต.ทุ่งหมอ</option>
+                    <option value="ต.เขาสามยอด">ต.เขาสามยอด</option>
+                    <option value="ต.สำนักขาม">ต.สำนักขาม</option>
+                </select>
+            </div>
+
+            <!-- เพิ่มส่วน: ปักหมุดแผนที่แหล่งน้ำที่มีปัญหา -->
+            <div>
+                <label style="display: block; font-weight: 500; margin-bottom: 8px; color: #333;">📍 ปักหมุดตำแหน่งจุดที่พบปัญหา (คลิกเลือกบนแผนที่):</label>
+                <div id="map" style="width: 100%; height: 300px; border-radius: 8px; border: 1px solid #ccc;"></div>
+                <input type="hidden" id="report-lat" name="lat">
+                <input type="hidden" id="report-lng" name="lng">
+                <small style="color: #666; display: block; margin-top: 5px;">* แผนที่จะตั้งค่าเริ่มต้นที่ตำแหน่งปัจจุบันของคุณ สามารถคลิกเลื่อนหมุดไปยังจุดเกิดเหตุได้ครับ</small>
+            </div>
+
+            <!-- เพิ่มส่วน: พิมพ์ข้อความรายละเอียดเพิ่มเติม -->
+            <div>
+                <label for="report-description" style="display: block; font-weight: 500; margin-bottom: 8px; color: #333;">รายละเอียดเพิ่มเติม:</label>
+                <textarea id="report-description" rows="4" placeholder="ระบุรายละเอียดเพิ่มเติม เช่น จุดสังเกต สีของน้ำ หรือลักษณะขยะ..." style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Prompt', sans-serif; font-size: 14px; box-sizing: border-box;"></textarea>
+            </div>
+
+            <!-- แนบรูปภาพ -->
+            <div>
+                <label for="report-image" style="display: block; font-weight: 500; margin-bottom: 8px; color: #333;">แนบรูปภาพหลักฐาน:</label>
+                <input type="file" id="report-image" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; background: #fafafa;">
+            </div>
+
+            <!-- ปุ่มกดส่ง -->
+            <button type="submit" style="background: #28a745; color: white; border: none; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+                ส่งรายงานปัญหา
+            </button>
+        </form>
+    </main>
+
+    <!-- Popup กล่องสีขาวตรงกลาง -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div style="font-size: 48px; margin-bottom: 10px;">✅</div>
+            <h3 style="color: #28a745; margin-top: 0; margin-bottom: 10px;">ส่งรายงานปัญหาสำเร็จ!</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">ขอบคุณที่ร่วมเป็นส่วนหนึ่งในการดูแลแหล่งน้ำ อ.สะเดา ค่ะ</p>
+            <button id="closeModalBtn" style="background: #28a745; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Prompt', sans-serif;">
+                ตกลง
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaflet JS สำหรับระบบแผนที่ -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Script ควบคุมการทำงานทั้งหมด -->
+    <script>
+        window.alert = function(msg) { console.log("Alert suppressed:", msg); };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // ตั้งค่าเริ่มต้นพิกัด อ.สะเดา (เผื่อกรณีไม่อนุญาตสิทธิ์ GPS)
+            let defaultLat = 6.6389;
+            let defaultLng = 100.4277;
+            let marker;
+
+            // สร้างแผนที่ Leaflet
+            const map = L.map('map').setView([defaultLat, defaultLng], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // ฟังก์ชันปักหมุด
+            function setMarker(lat, lng) {
+                if (marker) {
+                    marker.setLatLng([lat, lng]);
+                } else {
+                    marker = L.marker([lat, lng], {draggable: true}).addTo(map);
+                    marker.on('dragend', function(e) {
+                        const pos = marker.getLatLng();
+                        document.getElementById('report-lat').value = pos.lat;
+                        document.getElementById('report-lng').value = pos.lng;
+                    });
+                }
+                map.setView([lat, lng], 15);
+                document.getElementById('report-lat').value = lat;
+                document.getElementById('report-lng').value = lng;
+            }
+
+            // ดึงพิกัดตำแหน่งปัจจุบันของผู้ใช้มาตั้งค่าแผนที่
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+                        setMarker(userLat, userLng);
+                    },
+                    function(error) {
+                        // หากผู้ใช้ไม่อนุญาตใช้ GPS ให้ใช้พิกัดกลาง อ.สะเดา
+                        setMarker(defaultLat, defaultLng);
+                    }
+                );
+            } else {
+                setMarker(defaultLat, defaultLng);
+            }
+
+            // คลิกบนแผนที่เพื่อย้ายหมุด
+            map.on('click', function(e) {
+                setMarker(e.latlng.lat, e.latlng.lng);
+            });
+
+            // จัดการฟอร์ม
+            const reportForm = document.getElementById('water-report-form');
+            const successModal = document.getElementById('successModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const problemBtns = document.querySelectorAll('.problem-btn');
+            const titleInput = document.getElementById('report-title');
+
+            let pendingReportData = null;
+
+            problemBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    problemBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    if (titleInput) titleInput.value = this.getAttribute('data-value');
+                });
+            });
+
+            if (reportForm) {
+                reportForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    if (titleInput && !titleInput.value) {
+                        alert('กรุณาคลิกเลือกประเภทปัญหาก่อนครับ');
+                        return;
+                    }
+
+                    const locationInput = document.getElementById('report-location');
+                    const descInput = document.getElementById('report-description');
+                    const imageInput = document.getElementById('report-image');
+                    const latInput = document.getElementById('report-lat');
+                    const lngInput = document.getElementById('report-lng');
+
+                    const titleText = titleInput.value;
+                    const locationText = locationInput ? locationInput.value : 'อ.สะเดา';
+                    const descText = descInput ? descInput.value : '';
+                    const latVal = latInput ? latInput.value : defaultLat;
+                    const lngVal = lngInput ? lngInput.value : defaultLng;
+
+                    const prepareData = (imgData = '') => {
+                        pendingReportData = {
+                            id: Date.now(),
+                            title: titleText,
+                            location: locationText,
+                            description: descText,
+                            lat: latVal,
+                            lng: lngVal,
+                            status: 'รอตรวจสอบ',
+                            time: new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' }) + ' ' + new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.',
+                            image: imgData
+                        };
+
+                        if (successModal) {
+                            successModal.style.display = 'flex';
+                        }
+                    };
+
+                    if (imageInput && imageInput.files && imageInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(uploadEvent) {
+                            prepareData(uploadEvent.target.result);
+                        };
+                        reader.readAsDataURL(imageInput.files[0]);
+                    } else {
+                        prepareData('');
+                    }
+                });
+            }
+
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', function() {
+                    if (pendingReportData) {
+                        let reports = JSON.parse(localStorage.getItem('waterWatchReports')) || [];
+                        reports.unshift(pendingReportData);
+                        localStorage.setItem('waterWatchReports', JSON.stringify(reports));
+                    }
+
+                    if (successModal) successModal.style.display = 'none';
+                    if (reportForm) reportForm.reset();
+                    problemBtns.forEach(b => b.classList.remove('active'));
+                    if (titleInput) titleInput.value = '';
+
+                    window.location.href = 'dashboard.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
