@@ -364,7 +364,6 @@ document.getElementById("reportForm").addEventListener("submit", function(e) {
     // แจ้งเตือนว่ากำลังส่ง
     alert("กำลังส่งรายงาน...");
 
-    // ใช้ fetch แบบไม่มี mode เพื่อให้ส่งผ่าน CORS ของ Apps Script ได้ราบรื่นที่สุด
     fetch(url, {
         method: "POST",
         body: formData
@@ -372,11 +371,17 @@ document.getElementById("reportForm").addEventListener("submit", function(e) {
     .then(response => {
         alert("ส่งรายงานปัญหาเรียบร้อยแล้ว!");
         document.getElementById("reportForm").reset();
+        
+        // 👉 เติมบรรทัดนี้เพื่อสั่งให้เปลี่ยนหน้าเว็บหลังกดตกลง (เปลี่ยน 'index.html' เป็นชื่อไฟล์หน้าที่ต้องการให้เด้งไปครับ)
+        window.location.href = "index.html"; 
     })
     .catch(error => {
         console.error("Error:", error);
         alert("ส่งข้อมูลสำเร็จแล้วจ้า!");
         document.getElementById("reportForm").reset();
+        
+        // 👉 หรือถ้าจะให้เปลี่ยนหน้ากรณีเข้า catch ด้วย ก็ใส่บรรทัดนี้ไว้เหมือนกันครับ
+        window.location.href = "index.html";
     });
 });
 </script>
