@@ -311,5 +311,37 @@
             }
         });
     </script>
+    <!-- นำโค้ด JavaScript มาวางไว้ตรงนี้ก่อนปิด body -->
+    <script>
+    document.getElementById("reportForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        // ดึงค่าจากฟอร์ม (เช็กชื่อ id ใน HTML ให้ตรงกับตรงนี้ด้วยน้า)
+        const reportData = {
+            title: document.getElementById("issueTitle").value,
+            description: document.getElementById("issueDesc").value
+        };
+
+        // เอาลิงก์ Web App URL ที่ได้จาก Apps Script มาวางแทนที่คำว่า "วาง_Web_App_URL_ตรงนี้"
+        const url = "https://script.google.com/macros/s/AKfycbxsa2RbCZLicdwLAYjQLjrhX5zahKG-X6Hq02qsjOshNyh-hPQtyoZM7A5c-20GfA/exec";
+
+        fetch(url, {
+            method: "POST",
+            mode: "no-cors", // ป้องกันปัญหา CORS บน GitHub Pages
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(reportData)
+        })
+        .then(() => {
+            alert("ส่งรายงานปัญหาเรียบร้อยแล้ว!");
+            document.getElementById("reportForm").reset();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("เกิดข้อผิดพลาดในการส่งรายงาน");
+        });
+    });
+    </script>
 </body>
 </html>
