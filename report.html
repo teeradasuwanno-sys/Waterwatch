@@ -346,5 +346,39 @@
     });
 });
     </script>
+
+    <script>
+document.getElementById("reportForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById("issueTitle").value;
+    const description = document.getElementById("issueDesc").value;
+
+    const url = "วาง_Web_App_URL_ของเปาะเปี๊ยะ_ที่นี่";
+
+    // สร้างข้อมูลฟอร์ม
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+
+    // แจ้งเตือนว่ากำลังส่ง
+    alert("กำลังส่งรายงาน...");
+
+    // ใช้ fetch แบบไม่มี mode เพื่อให้ส่งผ่าน CORS ของ Apps Script ได้ราบรื่นที่สุด
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        alert("ส่งรายงานปัญหาเรียบร้อยแล้ว!");
+        document.getElementById("reportForm").reset();
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("ส่งข้อมูลสำเร็จแล้วจ้า!");
+        document.getElementById("reportForm").reset();
+    });
+});
+</script>
 </body>
 </html>
