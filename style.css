@@ -1821,5 +1821,24 @@ header.navbar, .navbar {
         box-sizing: border-box !important;
     }
 }
+@media screen and (max-width: 768px) {
+    /* ปรับ Navbar ให้รองรับการปัดเลื่อนหรือจัดเรียงใหม่ */
+    nav, .navbar, .nav-menu {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        width: 100% !important;
+        padding: 5px 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ปรับขนาดตัวหนังสือและระยะห่างของลิงก์เมนูให้พอดีจอ */
+    nav a, .navbar a, .nav-menu a {
+        font-size: 14px !important;
+        padding: 8px 10px !important;
+        margin: 2px !important;
+        white-space: nowrap !important;
+    }
+}
 
 
