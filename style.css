@@ -1849,3 +1849,41 @@ header.navbar, .navbar {
     }
 }
 
+/* บังคับจัดระเบียบสำหรับมือถือ */
+@media screen and (max-width: 768px) {
+    /* ปรับ Navbar ให้กะทัดรัด */
+    .navbar {
+        flex-direction: column !important;
+        padding: 10px !important;
+        align-items: center !important;
+    }
+
+    /* จัดลิงก์เมนูให้เรียงเป็นแถวเดียวแนวตั้ง หรือเป็นแถวเล็กๆ ไม่ล้น */
+    .nav-links, .nav-menu, nav div {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+        margin-top: 8px !important;
+    }
+
+    .navbar a, nav a {
+        font-size: 13px !important;
+        padding: 4px 8px !important;
+        margin: 0 !important;
+    }
+
+    /* แก้ปัญหาการ์ด/กล่องข้อความล้นขอบขวา */
+    .hero, .hero-section, .container, section, div {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ปรับให้ Flexbox/Grid ด้านล่างเรียงต่อกันเป็นแนวตั้งบนมือถือ */
+    .hero-content, .grid-container, .card-container {
+        flex-direction: column !important;
+        display: flex !important;
+        width: 100% !important;
+    }
+}
